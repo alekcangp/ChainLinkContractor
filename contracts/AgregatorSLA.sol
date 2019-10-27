@@ -26,7 +26,7 @@ contract AggregatorSLA is ChainlinkClient, Ownable {
   uint256 public latestCompletedAnswer;
   uint256 public updatedHeight;
   uint256 private paymentAmount = 1 * LINK;
-   uint128 public minimumResponses = 1; // min responses to transfer deposit
+   uint128 public minimumResponses = 2; // e.g. min responses to transfer deposit
   string[] private jobIds; //=[] insert an array of jobs id
   address[] private oracles; //=[] insert an array of oracles 
   string[] private urls; //=[] insert an array of API urls 
@@ -123,6 +123,7 @@ contract AggregatorSLA is ChainlinkClient, Ownable {
     ensureOnlyLatestAnswer(_answerId)
   {
   /* uncomment these lines for median aggregation
+  
     uint256 responseLength = answers[_answerId].responses.length;
     uint256 middleIndex = responseLength.div(2);
     if (responseLength % 2 == 0) {
@@ -135,8 +136,10 @@ contract AggregatorSLA is ChainlinkClient, Ownable {
     */
     
     /*uncomment these lines for mean aggregation
+    
     currentAnswer = meanAgr(answers[_answerId].responses);
    */ 
+   
     // Transfer all ETH from contract to client or provider
     if (currentAnswer < threshold) {
       client.transfer(address(this).balance);
