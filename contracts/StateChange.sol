@@ -83,7 +83,7 @@ contract HappyNewYear {
     }
 }
 
-//Random Contract Rinkeby 0x972c49907D7f22E2c8AE164C92C1019308ab03FA
+//State Change Contract via random.org API (Rinkeby) 0x972c49907D7f22E2c8AE164C92C1019308ab03FA
 
 contract SantaContract is Chainlinked, Ownable {
   uint256 constant private ORACLE_PAYMENT = 1 * LINK;
