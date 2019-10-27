@@ -1,0 +1,829 @@
+<!DOCTYPE HTML>
+<head>
+    <meta charset="utf-8">
+    <meta content='user-scalable=no, initial-scale=1, width=device-width' id='viewport' name='viewport'>
+    <!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://cdn.jsdelivr.net/npm/yandex-metrica-watch/tag.js", "ym");
+
+   ym(55957516, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+   });
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/55957516" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+	
+	
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.min.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src = "http://www.webglearth.com/v2/api.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.2.2/math.min.js"></script>
+    <script src = "https://unpkg.com/3d-force-graph@1.41.1/dist/3d-force-graph.min.js" async></script>
+    <script src = "./js/dialog.js" ></script>
+    <script src = "https://code.jquery.com/jquery-1.7.1.min.js" ></script>
+    <link href = "./css/style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Electrolize&display=swap" rel="stylesheet">
+    <link href = "https://use.fontawesome.com/releases/v5.1.0/css/all.css" type="text/css" rel="stylesheet"/>
+   
+
+<script>
+    var viewPortScale = 1 / window.devicePixelRatio;
+    $('#viewport').attr('content', 'user-scalable=yes, initial-scale='+viewPortScale+', width=device-width');
+  </script>
+</head>
+<body onload="init()">
+  
+
+<div id = "vmx" v-cloak>
+
+<div class = "hedfoot" style = "height: 60px; top:0; font-size:40px;">
+<div class = "point" onclick="swit(1)"><i class="fas fa-cogs"></i></div> <div style="min-width: 500px;"><b>C O N T R A C T O R</b></div> <div class = "point" onclick="swit(0)"><i class="fas fa-globe"></i></div>
+</div> 
+
+<div class="tabcontent">
+
+  <div id="map"></div>
+  <div class = "link point" onclick = "initButton()" style="top:10px;right:10px;">WHERE SANTA?</div>
+  <div class = "link point" style="bottom:10px; right:10px;" onclick="hnytok()">ADD TOKEN</div>
+  <div id = "hold" class = "link point" style="bottom:10px; left:10px;" v-html="hold"></div>
+  <div class = "link" style="top:10px; left:10px;">ACCOUNT:
+    <span id = "meta" ></span>
+  </div>
+</div>
+       
+<div class="tabcontent"> 
+  
+  <div style = "  background-color:  rgb(1, 32, 1); width: 1000px; margin-left:calc(50% - 500px); height: calc(100vh - 90px); display: flex; align-items: center; justify-content: center;">
+  <div style = "background-color:  rgb(1, 32, 1); width:1000px;margin-top:auto;margin-bottom: auto;">
+    <u>BUILD REAL-WORLD SMART CONTRACT</u>  <br><br>
+      Select type of smart contract: 
+      <select v-model="type">
+          <option v-for="con in contracts" v-bind:value="con.n">{{con.name}}</option>
+     </select>
+     &nbsp;&nbsp;&nbsp;<span class="point" onclick="mod1()">?</span>
+     <br><br>
+     Select Ethereum Network:
+     <select v-model="net">
+        <option v-for="n in nets" v-bind:value="n">{{n}}</option>
+    </select>
+    &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+    Cost: {{ (oracle.length * pars(urls).length)/cost[net] }} LINK per Answer
+      <br><br>
+      Select one or more Oracles:
+     <select v-model="oracle" multiple  style="height: 90px; ">
+        <option  v-for="or in oracles[net]" v-bind:value="or.o">{{or.n}} {{or.o}}</option>
+    </select>
+    <br><br>
+    <div v-if = "type == 1">
+        &nbsp;&nbsp;&nbsp;&nbsp; Enter Client Address :
+        <input placeholder="Ethereum Address" v-model = "client" style = "width:640px;height: 23px;" ></input>
+        <br><br>
+        Enter Provider Address :
+        <input placeholder="Ethereum Address" v-model = "provider" style = "width:640px;height: 23px;" ></input>
+        <br><br>
+    </div>
+    Enter API Sources :
+    <textarea wrap="off" placeholder="API urls separated by comma" v-model = "urls" ></textarea>
+    <br><br>
+    Enter JSON paths :
+    <textarea wrap="off" placeholder="Pathes separated by comma" v-model = "pathes" ></textarea>
+    
+    <div class = "point" onclick="test()" style = "margin-left:130px; margin-top:20px;  width:100px; height: 23px; border: 3px double yellowgreen;">T E S T</div>
+    <div  style = "margin-left:175px; margin-top:-29px;"><textarea disabled placeholder="Response">{{result}}</textarea></div>
+    <br>
+    <!--
+      Select method: 
+    <select v-model="http">
+      <option v-for="h in https" v-bind:value="h">{{h}}</option>
+    </select>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    -->
+    
+    Select Aggregation Method:
+    <select v-model="agr">
+        <option v-for="a in agrig" v-bind:value="a">{{a}}</option>
+    </select>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    Enter Multiplier: <input placeholder="Integer Number" v-model = "multi" style = "width:80px;height: 23px;" ></input>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    Enter Min Responses: <input placeholder="Integer Number" v-model = "count" style = "width:80px;height: 23px;" ></input>
+    <br>
+    <div v-if = "type == 1">
+    <br>
+    Enter Threshold: <input placeholder="Integer Number" v-model = "threshold" style = "width:160px;height: 23px;" ></input>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    Enter Contract Expiration Time: <input placeholder="in seconds" v-model = "time" style = "width:160px;height: 23px;" ></input>
+    </div>
+    <br>
+    Select additional features:
+    <select v-model="feat" multiple  style="height: 90px; ">
+      <option  v-for="fe in features" v-bind:value="fe.n" >{{fe.f}}</option>
+  </select>
+  <br><br>
+  <div>
+    <div class = "point but" onclick="code()" >C O D E</div>
+    <div class = "point but" onclick="demo()" >D E M O</div>
+    <div class = "point but" onclick="graph()" >G R A P H</div>
+  </div>
+  
+</div>
+</div>
+
+</div>
+
+
+<dialog id = "graph">
+  <div id="dg" style = "display: flex; justify-content: center;"></div>
+  <div style="width:30px; position: absolute; right: 5px; top: 5px; font-size: 25px;" onclick = "modalx('#graph')" class="point">&#10007;</div>
+</dialog>
+
+<dialog id = "code">
+    <div style="position:sticky; text-align:right; top:5px; font-size: 25px;">
+      <span style = "background-color: darkgrey;color:black"> SOLIDITY CODE </span>
+      <span  style = "margin-left:300px;" onclick = "modalx('#code')" class="point">&#10007;</span></div>
+  <div style="text-align: left; white-space: pre; overflow-x:auto;">
+  <span v-if = "type == 0">    
+pragma solidity 0.4.24;
+
+// Use {{net}} Test Network to deploy this smart contract.
+
+import "https://github.com/smartcontractkit/chainlink/evm/contracts/ChainlinkClient.sol";
+import "https://github.com/smartcontractkit/chainlink/evm/contracts/vendor/SignedSafeMath.sol";
+import "https://github.com/smartcontractkit/chainlink/evm/contracts/vendor/Ownable.sol";
+
+contract AggregatorMultiSources is ChainlinkClient, Ownable {
+  using SignedSafeMath for int256;
+  struct Answer {
+    uint128 minimumResponses;
+    uint128 maxResponses;
+    int256[] responses;
+  }
+
+  event ResponseReceived(int256 indexed response, uint256 indexed answerId, address indexed sender);
+  event AnswerUpdated(int256 indexed current, uint256 indexed answerId);
+
+  int256 public currentAnswer;
+  uint256 public latestCompletedAnswer;
+  uint256 public updatedHeight;
+  uint256 private paymentAmount = 1 * LINK / {{cost[net]}};
+   uint128 public minimumResponses = {{count}};
+  string[] private jobIds = {{jobs}};
+  address[] private oracles = {{JSON.stringify(oracle).replace(/"/g,'')}};
+  string[] private urls = {{pars(urls)}};
+  string[] private path ={{pars(pathes)}};
+  
+  uint256 private answerCounter = 1;
+  <span v-if = "feat.indexOf(4) != -1 && feat.indexOf(1) == -1">mapping(address => bool) public authorizedRequesters;</span>
+  mapping(bytes32 => uint256) private requestAnswers;
+  mapping(uint256 => Answer) private answers;
+
+  constructor() 
+    public Ownable() {
+    setPublicChainlinkToken();
+  }
+  
+ //Creates a Chainlink request for each oracle in the oracles array.
+
+  function requestRateUpdate()
+    external
+    <span v-if = "feat.indexOf(4) != -1 && feat.indexOf(1) == -1">ensureAuthorizedRequester()</span>
+    <span v-if = "feat.indexOf(1) == -1 && feat.indexOf(4) == -1">onlyOwner()</span>
+   
+  {
+    Chainlink.Request memory request;
+    bytes32 requestId;
+    uint256 oraclePayment = paymentAmount;
+
+ for (uint j = 0; j < urls.length; j++) {
+    for (uint i = 0; i < oracles.length; i++) {
+        request = buildChainlinkRequest(stringToBytes32(jobIds[i]), this, this.chainlinkCallback.selector);
+        request.add("get", urls[j]);
+        request.add("path", path[j]);
+        request.addInt("times", {{multi}});
+      requestId = sendChainlinkRequestTo(oracles[i], request, oraclePayment);
+      requestAnswers[requestId] = answerCounter;
+    }
+ }  
+    answers[answerCounter].minimumResponses = minimumResponses;
+    answers[answerCounter].maxResponses = uint128(oracles.length * urls.length);
+    answerCounter = answerCounter.add(1);
+  }
+  
+   //Receives the answer from the Chainlink node.
+   
+  function chainlinkCallback(bytes32 _clRequestId, int256 _response)
+    external
+    
+  {
+    validateChainlinkCallback(_clRequestId);
+
+    uint256 answerId = requestAnswers[_clRequestId];
+    delete requestAnswers[_clRequestId];
+
+    answers[answerId].responses.push(_response);
+    emit ResponseReceived(_response, answerId, msg.sender);
+    updateLatestAnswer(answerId);
+    deleteAnswer(answerId);
+  }
+<span v-if = "feat.indexOf(3) != -1">
+  // Allows the owner of the contract to withdraw any LINK balance.
+  
+  function transferLINK(address _recipient, uint256 _amount)
+    public
+    onlyOwner()
+  {
+    LinkTokenInterface link = LinkTokenInterface(chainlinkTokenAddress());
+    require(link.transfer(_recipient, _amount), "LINK transfer failed");
+  }
+  </span>
+
+  <span v-if = "feat.indexOf(4) != -1 && feat.indexOf(1) == -1">
+  // Called by the owner to permission other addresses to generate new.
+  
+  function setAuthorization(address _requester, bool _allowed)
+    external
+    onlyOwner()
+  {
+    authorizedRequesters[_requester] = _allowed;
+  }
+  </span>
+
+  <span v-if = "feat.indexOf(2) != -1">
+  // Called by the owner to destroy the contract. This transfers all LINK and ETH balance.
+  
+  function destroy()
+    external
+    onlyOwner()
+  {
+    LinkTokenInterface link = LinkTokenInterface(chainlinkTokenAddress());
+    transferLINK(owner, link.balanceOf(address(this)));
+    selfdestruct(owner);
+  }
+  </span>
+   //Performs aggregation (mean, mode or median) of the answers received from the Chainlink nodes.
+   
+  function updateLatestAnswer(uint256 _answerId)
+    private
+    ensureMinResponsesReceived(_answerId)
+    ensureOnlyLatestAnswer(_answerId)
+  {<span v-if = "agr == 'Median'">
+    uint256 responseLength = answers[_answerId].responses.length;
+    uint256 middleIndex = responseLength.div(2);
+    if (responseLength % 2 == 0) {
+      int256 median1 = quickselect(answers[_answerId].responses, middleIndex);
+      int256 median2 = quickselect(answers[_answerId].responses, middleIndex.add(1)); 
+      currentAnswer = median1.add(median2) / 2; 
+    } else {
+      currentAnswer = quickselect(answers[_answerId].responses, middleIndex.add(1)); 
+    }
+    </span>
+   <span v-else>
+     currentAnswer = meanAgr(answers[_answerId].responses);
+   </span>
+    latestCompletedAnswer = _answerId;
+    updatedHeight = block.number;
+    emit AnswerUpdated(currentAnswer, _answerId);
+  }
+  <span v-if = "agr == 'Median'">
+  //MEDIAN
+  
+  function quickselect(int256[] memory _a, uint256 _k)
+    private
+    pure
+    returns (int256)
+  {
+    int256[] memory a = _a;
+    uint256 k = _k;
+    uint256 aLen = a.length;
+    int256[] memory a1 = new int256[](aLen);
+    int256[] memory a2 = new int256[](aLen);
+    uint256 a1Len;
+    uint256 a2Len;
+    int256 pivot;
+    uint256 i;
+
+    while (true) {
+      pivot = a[aLen.div(2)];
+      a1Len = 0;
+      a2Len = 0;
+      for (i = 0; i < aLen; i++) {
+        if (a[i] < pivot) {
+          a1[a1Len] = a[i];
+          a1Len++;
+        } else if (a[i] > pivot) {
+          a2[a2Len] = a[i];
+          a2Len++;
+        }
+      }
+      if (k <= a1Len) {
+        aLen = a1Len;
+        (a, a1) = swap(a, a1);
+      } else if (k > (aLen.sub(a2Len))) {
+        k = k.sub(aLen.sub(a2Len));
+        aLen = a2Len;
+        (a, a2) = swap(a, a2);
+      } else {
+        return pivot;
+      }
+    }
+  }
+</span>
+
+<span v-else>
+  //MEAN 
+ 
+  function meanAgr(int256[] memory _a)
+      private
+      pure
+      returns (int256)
+    {
+      int256[] memory a = _a;
+      int256 mean = 0;
+      int256 q = 0;
+        for (uint i = 0; i < a.length; i++) {
+         mean += a[i];
+         q++;
+        }
+       mean = mean / q;
+     
+      return mean;
+    }
+  </span>
+
+  //Prevents taking an action if the minimum number of responses has not been received for an answer.
+ 
+  modifier ensureMinResponsesReceived(uint256 _answerId) {
+    if (answers[_answerId].responses.length >= answers[_answerId].minimumResponses) {
+      _;
+    }
+  }
+
+  // Prevents taking an action if a newer answer has been recorded.
+  
+  modifier ensureOnlyLatestAnswer(uint256 _answerId) {
+    if (latestCompletedAnswer <= _answerId) {
+      _;
+    }
+  }
+  <span v-if = "feat.indexOf(4) != -1 && feat.indexOf(1) == -1">
+  // Reverts if `msg.sender` is not authorized to make requests.
+   
+  modifier ensureAuthorizedRequester() {
+    require(authorizedRequesters[msg.sender] || msg.sender == owner, "Not an authorized address for creating requests");
+    _;
+  }
+</span>
+  //Prevents taking an action if not all responses are received for an answer.
+  
+  modifier ensureAllResponsesReceived(uint256 _answerId) {
+    if (answers[_answerId].responses.length == answers[_answerId].maxResponses) {
+      _;
+    }
+  }
+
+  //Swaps the pointers to two uint256 arrays in memory
+  
+  function swap(int256[] memory _a, int256[] memory _b)
+    private
+    pure
+    returns(int256[] memory, int256[] memory)
+  {
+    return (_b, _a);
+  }
+
+ //Cleans up the answer record if all responses have been received.
+  
+  function deleteAnswer(uint256 _answerId)
+    private
+    ensureAllResponsesReceived(_answerId)
+  {
+    delete answers[_answerId];
+  }
+ 
+
+//Convert JobId string to byte32
+
+function stringToBytes32(string memory source) private pure returns (bytes32 result) {
+    bytes memory tempEmptyStringTest = bytes(source);
+    if (tempEmptyStringTest.length == 0) {
+      return 0x0;
+    }
+
+    assembly {
+      result := mload(add(source, 32))
+    }
+  }
+
+}
+</span>
+
+<!--SLA CONTRACT-->
+<span v-if = "type == 1"> 
+  pragma solidity 0.4.24;
+
+  // Use {{net}} Test Network to deploy this smart contract.
+  
+  import "https://github.com/smartcontractkit/chainlink/evm/contracts/ChainlinkClient.sol";
+  import "https://github.com/smartcontractkit/chainlink/evm/contracts/vendor/SignedSafeMath.sol";
+  import "https://github.com/smartcontractkit/chainlink/evm/contracts/vendor/Ownable.sol";
+  
+  contract AggregatorMultiSources is ChainlinkClient, Ownable {
+    using SignedSafeMath for int256;
+    struct Answer {
+      uint128 minimumResponses;
+      uint128 maxResponses;
+      int256[] responses;
+    }
+  
+    event ResponseReceived(int256 indexed response, uint256 indexed answerId, address indexed sender);
+    event AnswerUpdated(int256 indexed current, uint256 indexed answerId);
+  
+    address private client = {{client}};
+    address private provider = {{provider}} ;
+    uint256 public endAt = block.timestamp.add({{time}});// contract expiration time
+    int256 constant public threshold = {{threshold}}; 
+
+    int256 public currentAnswer;
+    uint256 public latestCompletedAnswer;
+    uint256 public updatedHeight;
+    uint256 private paymentAmount = 1 * LINK / {{cost[net]}};
+     uint128 public minimumResponses = {{count}};
+    string[] private jobIds = {{jobs}};
+    address[] private oracles = {{JSON.stringify(oracle).replace(/"/g,'')}};
+    string[] private urls = {{pars(urls)}};
+    string[] private path ={{pars(pathes)}};
+    
+    uint256 private answerCounter = 1;
+    <span v-if = "feat.indexOf(4) != -1 && feat.indexOf(1) == -1">mapping(address => bool) public authorizedRequesters;</span>
+    mapping(bytes32 => uint256) private requestAnswers;
+    mapping(uint256 => Answer) private answers;
+  
+    constructor() 
+      public Ownable() {
+      setPublicChainlinkToken();
+    }
+    
+   //Creates a Chainlink request for each oracle in the oracles array.
+  
+    function requestRateUpdate()
+      external
+      <span v-if = "feat.indexOf(4) != -1 && feat.indexOf(1) == -1">ensureAuthorizedRequester()</span>
+      <span v-if = "feat.indexOf(1) == -1 && feat.indexOf(4) == -1">onlyOwner()</span>
+     
+    {
+      Chainlink.Request memory request;
+      bytes32 requestId;
+      uint256 oraclePayment = paymentAmount;
+  
+   for (uint j = 0; j < urls.length; j++) {
+      for (uint i = 0; i < oracles.length; i++) {
+          request = buildChainlinkRequest(stringToBytes32(jobIds[i]), this, this.chainlinkCallback.selector);
+          request.add("get", urls[j]);
+          request.add("path", path[j]);
+          request.addInt("times", {{multi}});
+        requestId = sendChainlinkRequestTo(oracles[i], request, oraclePayment);
+        requestAnswers[requestId] = answerCounter;
+      }
+   }  
+      answers[answerCounter].minimumResponses = minimumResponses;
+      answers[answerCounter].maxResponses = uint128(oracles.length * urls.length);
+      answerCounter = answerCounter.add(1);
+    }
+    
+     //Receives the answer from the Chainlink node.
+     
+    function chainlinkCallback(bytes32 _clRequestId, int256 _response)
+      external
+      
+    {
+      validateChainlinkCallback(_clRequestId);
+  
+      uint256 answerId = requestAnswers[_clRequestId];
+      delete requestAnswers[_clRequestId];
+  
+      answers[answerId].responses.push(_response);
+      emit ResponseReceived(_response, answerId, msg.sender);
+      updateLatestAnswer(answerId);
+      deleteAnswer(answerId);
+    }
+  <span v-if = "feat.indexOf(3) != -1">
+    // Allows the owner of the contract to withdraw any LINK balance.
+    
+    function transferLINK(address _recipient, uint256 _amount)
+      public
+      onlyOwner()
+    {
+      LinkTokenInterface link = LinkTokenInterface(chainlinkTokenAddress());
+      require(link.transfer(_recipient, _amount), "LINK transfer failed");
+    }
+    </span>
+  
+    <span v-if = "feat.indexOf(4) != -1 && feat.indexOf(1) == -1">
+    // Called by the owner to permission other addresses to generate new.
+    
+    function setAuthorization(address _requester, bool _allowed)
+      external
+      onlyOwner()
+    {
+      authorizedRequesters[_requester] = _allowed;
+    }
+    </span>
+  
+    <span v-if = "feat.indexOf(2) != -1">
+    // Called by the owner to destroy the contract. This transfers all LINK and ETH balance.
+    
+    function destroy()
+      external
+      onlyOwner()
+    {
+      LinkTokenInterface link = LinkTokenInterface(chainlinkTokenAddress());
+      transferLINK(owner, link.balanceOf(address(this)));
+      selfdestruct(owner);
+    }
+    </span>
+     //Performs aggregation (mean, mode or median) of the answers received from the Chainlink nodes.
+     
+    function updateLatestAnswer(uint256 _answerId)
+      private
+      ensureMinResponsesReceived(_answerId)
+      ensureOnlyLatestAnswer(_answerId)
+    {<span v-if = "agr == 'Median'">
+      uint256 responseLength = answers[_answerId].responses.length;
+      uint256 middleIndex = responseLength.div(2);
+      if (responseLength % 2 == 0) {
+        int256 median1 = quickselect(answers[_answerId].responses, middleIndex);
+        int256 median2 = quickselect(answers[_answerId].responses, middleIndex.add(1)); 
+        currentAnswer = median1.add(median2) / 2; 
+      } else {
+        currentAnswer = quickselect(answers[_answerId].responses, middleIndex.add(1)); 
+      }
+      </span>
+     <span v-else>
+       currentAnswer = meanAgr(answers[_answerId].responses);
+     </span>
+
+     if (currentAnswer < threshold) {
+      client.transfer(address(this).balance);
+    } else if (block.timestamp >= endAt) { 
+      provider.transfer(address(this).balance);
+    }
+
+      latestCompletedAnswer = _answerId;
+      updatedHeight = block.number;
+      emit AnswerUpdated(currentAnswer, _answerId);
+    }
+
+    <span v-if = "agr == 'Median'">
+    //MEDIAN
+    
+    function quickselect(int256[] memory _a, uint256 _k)
+      private
+      pure
+      returns (int256)
+    {
+      int256[] memory a = _a;
+      uint256 k = _k;
+      uint256 aLen = a.length;
+      int256[] memory a1 = new int256[](aLen);
+      int256[] memory a2 = new int256[](aLen);
+      uint256 a1Len;
+      uint256 a2Len;
+      int256 pivot;
+      uint256 i;
+  
+      while (true) {
+        pivot = a[aLen.div(2)];
+        a1Len = 0;
+        a2Len = 0;
+        for (i = 0; i < aLen; i++) {
+          if (a[i] < pivot) {
+            a1[a1Len] = a[i];
+            a1Len++;
+          } else if (a[i] > pivot) {
+            a2[a2Len] = a[i];
+            a2Len++;
+          }
+        }
+        if (k <= a1Len) {
+          aLen = a1Len;
+          (a, a1) = swap(a, a1);
+        } else if (k > (aLen.sub(a2Len))) {
+          k = k.sub(aLen.sub(a2Len));
+          aLen = a2Len;
+          (a, a2) = swap(a, a2);
+        } else {
+          return pivot;
+        }
+      }
+    }
+  </span>
+  
+  <span v-else>
+    //MEAN 
+   
+    function meanAgr(int256[] memory _a)
+        private
+        pure
+        returns (int256)
+      {
+        int256[] memory a = _a;
+        int256 mean = 0;
+        int256 q = 0;
+          for (uint i = 0; i < a.length; i++) {
+           mean += a[i];
+           q++;
+          }
+         mean = mean / q;
+       
+        return mean;
+      }
+    </span>
+  
+    //Prevents taking an action if the minimum number of responses has not been received for an answer.
+   
+    modifier ensureMinResponsesReceived(uint256 _answerId) {
+      if (answers[_answerId].responses.length == answers[_answerId].minimumResponses) {
+        _;
+      }
+    }
+  
+    // Prevents taking an action if a newer answer has been recorded.
+    
+    modifier ensureOnlyLatestAnswer(uint256 _answerId) {
+      if (latestCompletedAnswer <= _answerId) {
+        _;
+      }
+    }
+    <span v-if = "feat.indexOf(4) != -1 && feat.indexOf(1) == -1">
+    // Reverts if `msg.sender` is not authorized to make requests.
+     
+    modifier ensureAuthorizedRequester() {
+      require(authorizedRequesters[msg.sender] || msg.sender == owner, "Not an authorized address for creating requests");
+      _;
+    }
+  </span>
+    //Prevents taking an action if not all responses are received for an answer.
+    
+    modifier ensureAllResponsesReceived(uint256 _answerId) {
+      if (answers[_answerId].responses.length == answers[_answerId].maxResponses) {
+        _;
+      }
+    }
+  
+    //Swaps the pointers to two uint256 arrays in memory
+    
+    function swap(int256[] memory _a, int256[] memory _b)
+      private
+      pure
+      returns(int256[] memory, int256[] memory)
+    {
+      return (_b, _a);
+    }
+  
+   //Cleans up the answer record if all responses have been received.
+    
+    function deleteAnswer(uint256 _answerId)
+      private
+      ensureAllResponsesReceived(_answerId)
+    {
+      delete answers[_answerId];
+    }
+   
+  
+  //Convert JobId string to byte32
+  
+  function stringToBytes32(string memory source) private pure returns (bytes32 result) {
+      bytes memory tempEmptyStringTest = bytes(source);
+      if (tempEmptyStringTest.length == 0) {
+        return 0x0;
+      }
+  
+      assembly {
+        result := mload(add(source, 32))
+      }
+    }
+  
+    function () public payable {}
+
+  }
+
+
+</span>
+</div>
+  
+</dialog>
+
+
+
+
+
+
+
+
+<div class = "hedfoot point" style = "height: 30px; bottom:0">
+  <a href='https://chain.link/' target='_blank'>Powered by ChainLink & Ethereum Network</a>
+</div> 
+
+
+</div>
+
+<script src = "./js/script.js"></script>
+
+<script>
+
+//Switch tab
+var tabcontent = document.getElementsByClassName("tabcontent");
+swit(0);
+function swit(n) {
+  for (var i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+  }
+  tabcontent[n].style.display = "block";
+  
+}
+
+
+</script>
+
+
+
+
+
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<!--
+const w3d = new Web3Data('UAK4b4c54288cdba5c000c80b3339897180',{blockchainId: '1b3f7a72b3e99c13'});
+
+( async () => {
+     const contract = await w3d.contract.getDetails("0x724d1b69a7ba352f11d73fdbdeb7ff869cb22e19");
+     document.getElementById('test').innerHTML = JSON.stringify(contract); // { ... }
+})()
+
+
+    
+    async function getUser() {
+
+const options = {
+    headers: {'x-amberdata-blockchain-id': '1b3f7a72b3e99c13' },
+    data: {"jsonrpc":"2.0","method":"sendrawtransaction","params":["0x619cba1a0000000000000000000000007afe1118ea78c1eae84ca8fee5c65bc76ccf879e000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000206338303834393838663062353435323062613137393435633461326162376263"],"id":1}
+    };
+    try {
+      const response = await axios.post('https://rpc.web3api.io?x-api-key=UAK4b4c54288cdba5c000c80b3339897180', options);
+      document.getElementById('test').innerHTML = JSON.stringify(response);//alert(response);
+    } catch (error) {
+     alert(error);
+    }
+  }
+
+    getUser()
+     async function getUser() {
+
+        const options = {
+            headers: {'x-api-key':['UAK4b4c54288cdba5c000c80b3339897180']}
+            };
+            try {
+              const response = await axios.get('https://web3api.io/api/v2/market/tokens/prices/0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2/latest?currency=usd', options);
+              document.getElementById('test').innerHTML = JSON.stringify(response);//alert(response);
+            } catch (error) {
+             alert(error);
+            }
+          }
+    
+         // 'https://web3api.io/api/v2/contracts/0x88e69c0d2D924e642965F8Dd151Dd2E24Ba154F8'
+        //  https://web3api.io/api/v2/addresses/0x88e69c0d2D924e642965F8Dd151Dd2E24Ba154F8/transactions
+         // 0xc10e07eeff7c5ec9fbd620f9efe58d1e4e3adf00c168056e73ebc1407e1f90a2
+
+*/
+        -->
+
+
+</html>
