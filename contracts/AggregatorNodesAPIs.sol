@@ -43,7 +43,7 @@ contract AggregatorMultiSources is ChainlinkClient, Ownable {
 
   function requestRateUpdate()
     external
-    onlyOwner()
+    ensureAuthorizedRequester()
   {
     Chainlink.Request memory request;
     bytes32 requestId;
@@ -115,6 +115,8 @@ contract AggregatorMultiSources is ChainlinkClient, Ownable {
    
   function updateLatestAnswer(uint256 _answerId)
     private
+    ensureMinResponsesReceived(_answerId)
+    ensureOnlyLatestAnswer(_answerId)
   {
     /* uncomment these lines for median aggregation
       
@@ -199,6 +201,38 @@ function meanAgr(int256[] memory _a)
       }
     }
   }
+  
+  //Prevents taking an action if the minimum number of responses has not been received for an answer.
+ 
+  modifier ensureMinResponsesReceived(uint256 _answerId) {
+    if (answers[_answerId].responses.length == answers[_answerId].minimumResponses) {
+      _;
+    }
+  }
+
+  // Prevents taking an action if a newer answer has been recorded.
+  
+  modifier ensureOnlyLatestAnswer(uint256 _answerId) {
+    if (latestCompletedAnswer <= _answerId) {
+      _;
+    }
+  }
+  
+  // Reverts if `msg.sender` is not authorized to make requests.
+   
+  modifier ensureAuthorizedRequester() {
+    require(authorizedRequesters[msg.sender] || msg.sender == owner, "Not an authorized address for creating requests");
+    _;
+  }
+
+  //Prevents taking an action if not all responses are received for an answer.
+  
+  modifier ensureAllResponsesReceived(uint256 _answerId) {
+    if (answers[_answerId].responses.length == answers[_answerId].maxResponses) {
+      _;
+    }
+  }
+
 
   //Swaps the pointers to two uint256 arrays in memory
   
