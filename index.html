@@ -25,8 +25,12 @@
     <script src = "http://www.webglearth.com/v2/api.js"></script>
     <script src = "https://cdnjs.cloudflare.com/ajax/libs/mathjs/6.2.2/math.min.js"></script>
     <script src = "https://unpkg.com/3d-force-graph@1.41.1/dist/3d-force-graph.min.js" async></script>
+    <script src = "./js/dat.gui.min.js" ></script>
     <script src = "./js/dialog.js" ></script>
     <script src = "https://code.jquery.com/jquery-1.7.1.min.js" ></script>
+    
+
+    <link rel = "icon" type="image/png" href="./img/favicon.png" sizes = "any" >
     <link href = "./css/style.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Electrolize&display=swap" rel="stylesheet">
     <link href = "https://use.fontawesome.com/releases/v5.1.0/css/all.css" type="text/css" rel="stylesheet"/>
@@ -37,11 +41,11 @@
     $('#viewport').attr('content', 'user-scalable=yes, initial-scale='+viewPortScale+', width=device-width');
   </script>
 </head>
-<body onload="init()">
-  
+<body>
 
+ <canvas id="c"></canvas>
 <div id = "vmx" v-cloak>
-
+ 
 <div class = "hedfoot" style = "height: 60px; top:0; font-size:40px;">
 <div class = "point" onclick="swit(1)"><i class="fas fa-cogs"></i></div> <div style="min-width: 500px;"><b>C O N T R A C T O R</b></div> <div class = "point" onclick="swit(0)"><i class="fas fa-globe"></i></div>
 </div> 
@@ -51,22 +55,24 @@
   <div id="map"></div>
   <div class = "link point" onclick = "initButton()" style="top:10px;right:10px;">WHERE SANTA?</div>
   <div class = "link point" style="bottom:10px; right:10px;" onclick="hnytok()">ADD TOKEN</div>
-  <div id = "hold" class = "link point" style="bottom:10px; left:10px;" v-html="hold"></div>
+  <div id = "hold" class = "link" style="bottom:10px; left:10px;" v-html="hold"></div>
   <div class = "link" style="top:10px; left:10px;">ACCOUNT:
     <span id = "meta" ></span>
   </div>
 </div>
-       
+ 
 <div class="tabcontent"> 
   
+  
   <div style = "  background-color:  rgb(1, 32, 1); width: 1000px; margin-left:calc(50% - 500px); height: calc(100vh - 90px); display: flex; align-items: center; justify-content: center;">
-  <div style = "background-color:  rgb(1, 32, 1); width:1000px;margin-top:auto;margin-bottom: auto;">
+  
+    <div style = "background-color:  rgb(1, 32, 1); width:1000px;margin-top:auto;margin-bottom: auto;">
     <u>BUILD REAL-WORLD SMART CONTRACT</u>  <br><br>
       Select type of smart contract: 
       <select v-model="type">
           <option v-for="con in contracts" v-bind:value="con.n">{{con.name}}</option>
      </select>
-     &nbsp;&nbsp;&nbsp;<span class="point" onclick="mod1()">?</span>
+     &nbsp;&nbsp;&nbsp;<span class="point" onclick="modalv('#quest')">?</span>
      <br><br>
      Select Ethereum Network:
      <select v-model="net">
@@ -116,10 +122,15 @@
     <br>
     <div v-if = "type == 1">
     <br>
+    Condition: 
+    <select v-model="cond" style="height: 23px; width: 50px; ">
+        <option  v-for="c in conds" v-bind:value="c" >{{c}}</option>
+    </select>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     Enter Threshold: <input placeholder="Integer Number" v-model = "threshold" style = "width:160px;height: 23px;" ></input>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    Enter Contract Expiration Time: <input placeholder="in seconds" v-model = "time" style = "width:160px;height: 23px;" ></input>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    
+    Enter Expiration Time: <input placeholder="in seconds" v-model = "time" style = "width:160px;height: 23px;" ></input>
     </div>
     <br>
     Select additional features:
@@ -128,7 +139,7 @@
   </select>
   <br><br>
   <div>
-    <div class = "point but" onclick="code()" >C O D E</div>
+    <div class = "point but" onclick="code(0)" >C O D E</div>
     <div class = "point but" onclick="demo()" >D E M O</div>
     <div class = "point but" onclick="graph()" >G R A P H</div>
   </div>
@@ -144,10 +155,40 @@
   <div style="width:30px; position: absolute; right: 5px; top: 5px; font-size: 25px;" onclick = "modalx('#graph')" class="point">&#10007;</div>
 </dialog>
 
+<dialog id = "quest">
+  <div style="position:sticky; text-align:right; top:5px; font-size: 25px;">
+    <span  style = "margin-left:770px;" onclick = "modalx('#quest')" class="point">&#10007;</span>
+  </div>
+  <div style="text-align: left; ">
+    <span v-if = "type == 0">
+        The contract calculates median or mean from aggregate data, using decentralized Oracles Network and different APIs sources.
+        Use this contract for creating requests to multiple Chainlink nodes and APIs providers and running aggregation as the contract receives answers.
+        <br>
+        Parametrs:
+        <br>
+        * Min Responses is the minimum number of responses before an answer will be calculated;<br>
+        * Multiplier parses the input into a float and then multiplies it by the 'Multiplier' field.
+    </span>
+
+    <span v-if = "type == 1">
+        When the contract is deployed a client, provider, and start time are specified. 
+        Additionally a deposit is made. The end of the contract is set by the 'Expiration Time' field in seconds after the start time. 
+        After the contract is created, resolved addresses can request updates from the oracle for the contract.
+        If the oracle reports that the condition set by 'Condition' and 'Threshold' fields is true then the deposit is released to the client.
+        If the condition is still false after the contract ends, and the deposit has not been released, the deposit is sent to the provider.    
+    </span>
+  
+  </div>
+
+</dialog>
+
 <dialog id = "code">
     <div style="position:sticky; text-align:right; top:5px; font-size: 25px;">
-      <span style = "background-color: darkgrey;color:black"> SOLIDITY CODE </span>
-      <span  style = "margin-left:300px;" onclick = "modalx('#code')" class="point">&#10007;</span></div>
+
+      <span style = "background-color: darkgrey;color:black"><span v-if = "demo == 0" > &nbsp;SOLIDITY CODE &nbsp; </span>
+        <span v-else class = 'point' onclick = "gits()"> &nbsp;DEPLOY CONTRACT &nbsp;</span>
+      </span>
+      <span  style = "margin-left:250px;" onclick = "modalx('#code')" class="point">&#10007;</span></div>
   <div style="text-align: left; white-space: pre; overflow-x:auto;">
   <span v-if = "type == 0">    
 pragma solidity 0.4.24;
@@ -569,7 +610,7 @@ function stringToBytes32(string memory source) private pure returns (bytes32 res
        currentAnswer = meanAgr(answers[_answerId].responses);
      </span>
 
-     if (currentAnswer < threshold) {
+     if (currentAnswer {{cond}} threshold) {
       client.transfer(address(this).balance);
     } else if (block.timestamp >= endAt) { 
       provider.transfer(address(this).balance);
@@ -733,11 +774,7 @@ function stringToBytes32(string memory source) private pure returns (bytes32 res
 
 
 </div>
-
-<script src = "./js/script.js"></script>
-
-<script>
-
+ <script>
 //Switch tab
 var tabcontent = document.getElementsByClassName("tabcontent");
 swit(0);
@@ -748,82 +785,16 @@ function swit(n) {
   tabcontent[n].style.display = "block";
   
 }
-
-
 </script>
+<script src = "./js/script.js"></script>
+<script src = "./js/rays.js" ></script> 
+
+
 
 
 
 
 
 </body>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-<!--
-const w3d = new Web3Data('UAK4b4c54288cdba5c000c80b3339897180',{blockchainId: '1b3f7a72b3e99c13'});
-
-( async () => {
-     const contract = await w3d.contract.getDetails("0x724d1b69a7ba352f11d73fdbdeb7ff869cb22e19");
-     document.getElementById('test').innerHTML = JSON.stringify(contract); // { ... }
-})()
-
-
-    
-    async function getUser() {
-
-const options = {
-    headers: {'x-amberdata-blockchain-id': '1b3f7a72b3e99c13' },
-    data: {"jsonrpc":"2.0","method":"sendrawtransaction","params":["0x619cba1a0000000000000000000000007afe1118ea78c1eae84ca8fee5c65bc76ccf879e000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000206338303834393838663062353435323062613137393435633461326162376263"],"id":1}
-    };
-    try {
-      const response = await axios.post('https://rpc.web3api.io?x-api-key=UAK4b4c54288cdba5c000c80b3339897180', options);
-      document.getElementById('test').innerHTML = JSON.stringify(response);//alert(response);
-    } catch (error) {
-     alert(error);
-    }
-  }
-
-    getUser()
-     async function getUser() {
-
-        const options = {
-            headers: {'x-api-key':['UAK4b4c54288cdba5c000c80b3339897180']}
-            };
-            try {
-              const response = await axios.get('https://web3api.io/api/v2/market/tokens/prices/0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2/latest?currency=usd', options);
-              document.getElementById('test').innerHTML = JSON.stringify(response);//alert(response);
-            } catch (error) {
-             alert(error);
-            }
-          }
-    
-         // 'https://web3api.io/api/v2/contracts/0x88e69c0d2D924e642965F8Dd151Dd2E24Ba154F8'
-        //  https://web3api.io/api/v2/addresses/0x88e69c0d2D924e642965F8Dd151Dd2E24Ba154F8/transactions
-         // 0xc10e07eeff7c5ec9fbd620f9efe58d1e4e3adf00c168056e73ebc1407e1f90a2
-
-*/
-        -->
-
 
 </html>

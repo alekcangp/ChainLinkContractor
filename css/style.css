@@ -5,6 +5,16 @@
     width: 0px;
     }
 
+    #c {
+	z-index: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+       
+    }
+
 html, body {
     background-color:black;
     padding: 0; margin: 0;
@@ -133,6 +143,33 @@ select, option, input {
     #code:not([open]) {
         display: none;
         }
+
+
+        #quest {
+            position: absolute;
+            left: 0; right: 0;
+            width: -moz-fit-content;
+            width: -webkit-fit-content;
+            width: fit-content;
+            height: -moz-fit-content;
+            height: -webkit-fit-content;
+            height: fit-content;
+            margin: auto;
+            width: 800px;
+            height: 200px;
+            border: solid;
+            background:black ;
+            color: darkgrey;
+            display: block;
+            overflow-y: auto;
+            font-size: 18px; 
+        
+        }
+        
+        #quest:not([open]) {
+            display: none;
+            }
+    
 
     dialog + .backdrop {
         position: fixed;

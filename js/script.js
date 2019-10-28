@@ -1,5 +1,4 @@
 
-
 var vm = new Vue({
   el: '#vmx',
   data: {
@@ -31,15 +30,25 @@ var vm = new Vue({
       feat:[],
       https:['get','post'],
       http:'get',
-      hold:"<span onclick=\"window.open('https://rinkeby.etherscan.io/token/0x10d05006a637470a709f9d41cb61bcea96ebe9b6#balances')\">TOKEN HOLDERS</span>",
+      hold:"<span class = 'point' onclick=\"window.open('https://rinkeby.etherscan.io/token/0x10d05006a637470a709f9d41cb61bcea96ebe9b6#balances')\">TOKEN HOLDERS</span>",
       cost:{'Mainnet':10,'Ropsten':1},
       count:1,
       client:'',
       provider:'',
       threshold:'',
       time:'',
+      conds:['<','<=','==','>=','>','!='],
+      cond:'<',
+      demo:0,
   }
 });
+
+function gits() {
+  var uu;
+  if (vm.type == 0) {uu = "https://remix.ethereum.org/#gist=7d65a495c5bd1804414ce115a325f586&optimize=false&evmVersion=null&version=soljson-v0.4.24+commit.e67f0147.js"}
+  else if (vm.type == 1) {uu = "https://remix.ethereum.org/#gist=7184c21e0b85dd9fbce12749f033a99b&optimize=false&evmVersion=null&version=soljson-v0.4.24+commit.e67f0147.js"}
+  window.open(uu);
+}
  
 function demo() {
   if (vm.type == 1) {
@@ -47,6 +56,7 @@ function demo() {
     vm.provider = "0xd62808C0bbc51f2370a184E08a1E24D3E3bE7483";
     vm.threshold = 9000;
     vm.time = 86400;
+    vm.cond = '<';
   }
   vm.count = 4;
   vm.multi = 1;
@@ -56,17 +66,17 @@ function demo() {
   'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd';
   vm.pathes = 'RAW.BTC.USD.PRICE,bitcoin.usd';
   vm.feat = [2,3,4];
-  code();
+  code(1);
   graph();
 }
  
-
+init();
  //EARTH
   var map, req, reqq; 
       function init() {
         map = WE.map('map', {
           center: [36.057944835, -112.18688965],
-          zoom: 2,
+          zoom: 3,
           dragging: true,
           scrollWheelZoom: true,
           atmosphere: true,
@@ -122,7 +132,7 @@ if (window.ethereum) { window.web3 = new Web3(ethereum);  xmes();}
 // Legacy dapp browsers...
 else if (window.web3) {window.web3 = new Web3(web3.currentProvider); xmes();} 
 else {
-  mes = "<span style = 'color:red'>Install MetaMask and refresh page</span>"; messs(mes); clearInterval(int);//"Non-Ethereum browser detected";
+  mes = "<a href='https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn' target='_blank'><span style = 'color:red' class='point'>Install MetaMask and refresh page</span></a>"; messs(mes); clearInterval(int);//"Non-Ethereum browser detected";
   }
 }catch(e){}
 
@@ -173,7 +183,7 @@ async function initButton () {
       ethereum.sendAsync({
         method: 'eth_sendTransaction',
         params: [transactionParameters],
-      }, function(e){document.getElementById('hold').innerHTML = "We are looking for Santa, please wait about 1 minute..."})
+      }, function(e){document.getElementById('hold').innerHTML = "We are looking for Santa via Oracle, please wait about 1 minute..."})
     } else {
     alert('Switch MetaMask to Rinkeby Network');
     }
@@ -184,11 +194,11 @@ async function initButton () {
 
 var coords = [], befor = 0, now = 0, markerSanta = [];
 apidata(0);
-//setInterval(apidata,30000,1);
+setInterval(apidata,30000,1);
 
 async function apidata(x) {
   coords = [];
-await axios.get('https://api-rinkeby.etherscan.io/api?module=logs&action=getLogs&fromBlock=5311335&toBlock=latest&address='+contract+'&topic0=0x7acd657e89e6cffe6e2f2b9382792f76f8c7c94c00befc15d0c6a2c4c304cd48&apikey=xxxxxxxxxxxxxxxxxx').then(function(response){
+await axios.get('https://api-rinkeby.etherscan.io/api?module=logs&action=getLogs&fromBlock=5311335&toBlock=latest&address='+contract+'&topic0=0x7acd657e89e6cffe6e2f2b9382792f76f8c7c94c00befc15d0c6a2c4c304cd48&apikey=xxx').then(function(response){
 var res = response.data.result;
 for (var i = 1; i < res.length; i++) {
   coords.push({'time':parseInt(res[i].timeStamp),'coord':[parseInt(res[i].topics[2])/2-90,parseInt(res[i-1].topics[2])-180]})
@@ -205,7 +215,7 @@ async function srender(x) {
   if (x == 1) {
     setTimeout(function(){document.getElementById('hold').innerHTML = vm.hold;},30000); document.getElementById('hold').innerHTML = "Santa has sent to you 1 HappyNewYear token";
   }
-  await axios('https://api.weatherbit.io/v2.0/current?key=xxxxxxxxxxxxxxxxxxx&lang=en&lat='+coords[now-1].coord[0]+'&lon='+coords[now-1].coord[1]).then(function(response){
+  await axios('https://api.weatherbit.io/v2.0/current?key=xxx&lang=en&lat='+coords[now-1].coord[0]+'&lon='+coords[now-1].coord[1]).then(function(response){
    var resp = response.data.data[0]; weth = resp.city_name + ', Temp:'+resp.temp+' C';
   }).catch(function(resp){});
 for (var i = 0; i < now; i++) {
@@ -278,13 +288,20 @@ function modalv(x) {
       }
 
 
-function code() {
-
+function code(d) {
+vm.demo = d;
   if (vm.oracle.length == 0) {alert('Select one or more Oracles!');return} 
     else if (vm.urls == '') {alert('Enter API Sources!'); return} 
     else if (vm.pathes == '') {alert('Enter JSON Pathes!'); return}
     else if (pars(vm.pathes).length != pars(vm.urls).length) {alert('Number of the urls must be equal number of the paths!'); return}
   if (vm.count > vm.oracle.length * pars(vm.urls).length) {alert('The min responses must be less than total amount of the responses (Oracles * APIs).'); return}
+  if (vm.multi == '') {alert('Enter Multiplier'); return} else if (vm.count == '') {alert('Enter Minimum Responses');return}
+  
+  if (vm.type == 1) {
+    if (vm.client == '') {alert('Enter Client Address'); return} else if (vm.provider == '') {alert('Enter Provider Address'); return} else if (vm.multi == '') {alert('Enter Multiplier'); return}
+    else if (vm.threshold == '') {alert('Enter Threshold'); return} else if (vm.time == '') {alert('Enter Expiration Time'); return}
+  } 
+
   vm.jobs = [];
   for (var i of vm.oracles[vm.net]) {
     vm.jobs.push(i.get);
