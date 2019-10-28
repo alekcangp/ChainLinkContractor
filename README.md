@@ -1,8 +1,8 @@
 # ChainLinkContractor
 
-<p align="center"><a target='_blank' href = "http://contractor.rf.gd/"><b style = "background</a></p><p align="center"><a target='_blank' href = "http://contractor.rf.gd/"><b style = "background-color:darkblue; color:#fff; font-size:40px">&nbsp C O N T R A C T O R &nbsp </b></a></p>
- <p align="center">>> <a href = "http://contractor.rf.gd/"><b>http://contractor.rf.gd/</b></a> <<</p>
- <p align="center">>> <a href = #">Video Tutorial</a> <<</p>
+<p align="center"><b style = "background-color:darkblue; color:#fff; font-size:40px">&nbsp C O N T R A C T O R &nbsp </b></p>
+<p align="center">>> <a href = "http://contractor.rf.gd/"><b>http://contractor.rf.gd/</b></a> <<</p>
+<p align="center">>> <a href = #">Video Tutorial</a> <<</p>
 <!-- <p align="center"><img src="https://img.shields.io/badge/STATUS-ONLINE-gsuccess"/></p>-->
 <p align="center"><img src="https://img.shields.io/badge/STATUS-DEVELOPMENT-green"/></p>
 
