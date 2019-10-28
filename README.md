@@ -14,7 +14,7 @@ The Contractor allows users to easily create Aggregation Contract and Service Le
 In addition, (especially for fans :) users can find out where is Santa located on the globe and get HappyNewYear tokens from Santa. This feature also interacts with the real-world through ChainLink Oracle (random.org).
 
 Requirements:
-* <a href = "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknnMetaMask">MetaMask Plugin</a>
+* <a href = "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn">MetaMask Plugin</a>
 
 
 
