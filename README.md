@@ -8,11 +8,11 @@
 
 The Contractor is constructor of smart contracts.
 
-    Purpose this project is easy building real-world smart contracts using off-chain resources and decentralized ChainLink Oracles Network.
+Purpose this project is easy building real-world smart contracts using off-chain resources and decentralized ChainLink Oracles Network.
 
-    The Contractor allows users to easily create Aggregation Contract and Service Level Agreement Contract. All contracts take data from several Oracles and APIs. The Contractor generates an interactive 3D graph and source code of the smart contracts.
+The Contractor allows users to easily create Aggregation Contract and Service Level Agreement Contract. All contracts take data from several Oracles and APIs. The Contractor generates an interactive 3D graph and source code of the smart contracts.
 
-    In addition, (especially for fans :) users can find out where is Santa located on the globe and get HappyNewYear tokens from Santa. This feature also interacts with the real-world through ChainLink Oracle (random.org).
+In addition, (especially for fans :) users can find out where is Santa located on the globe and get HappyNewYear tokens from Santa. This feature also interacts with the real-world through ChainLink Oracle (random.org).
 
 
 <p align="center">v v  Screenshorts Zone  v v</p>
