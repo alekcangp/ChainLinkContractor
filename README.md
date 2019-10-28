@@ -1,7 +1,7 @@
 # ChainLink Contractor
 
 <p align="center">>> <a href = "http://contractor.rf.gd/"><b>http://contractor.rf.gd/</b></a> <<</p>
-<p align="center">>> <a href = #">Video Tutorial</a> <<</p>
+<p align="center">>> <a href = "https://vimeo.com/369277598">Video Tutorial</a> <<</p>
 <!-- <p align="center"><img src="https://img.shields.io/badge/STATUS-ONLINE-gsuccess"/></p>-->
 <p align="center"><img src="https://img.shields.io/badge/STATUS-DEVELOPMENT-green"/></p>
 
