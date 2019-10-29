@@ -192,7 +192,7 @@ async function initButton () {
 
 //Get API Data
 
-var coords = [], befor = 0, now = 0, markerSanta = [];
+var coords = [], befor = 0, now = 0, markerSanta = [], cat = '';
 apidata(0);
 setInterval(apidata,30000,1);
 
@@ -201,6 +201,7 @@ async function apidata(x) {
 await axios.get('https://api-rinkeby.etherscan.io/api?module=logs&action=getLogs&fromBlock=5311335&toBlock=latest&address='+contract+'&topic0=0x7acd657e89e6cffe6e2f2b9382792f76f8c7c94c00befc15d0c6a2c4c304cd48&apikey=xxx').then(function(response){
 var res = response.data.result;
 for (var i = 1; i < res.length; i++) {
+ 
   coords.push({'time':parseInt(res[i].timeStamp),'coord':[parseInt(res[i].topics[2])/2-90,parseInt(res[i-1].topics[2])-180]})
 }
 now = coords.length;
@@ -219,15 +220,22 @@ async function srender(x) {
    var resp = response.data.data[0]; weth = resp.city_name + ', Temp:'+resp.temp+' C';
   }).catch(function(resp){});
 for (var i = 0; i < now; i++) {
-  try { markerSanta[i].removeFrom(map);}catch(e){}
-  var tt = moment.parseZone(coords[i].time*1000).format('DD-MM-YYYY HH:mm:ss');
+
+ await axios.get('https://api.thecatapi.com/v1/images/search').then(function(c){cat = c.data[0]}).catch(function(e){});
+  var x = cat.width/150, xx = cat.width/400;
+ var imag = "<div style = 'height:"+cat.height/x+"px;width:"+150+"px; overflow:hidden'><img style = 'position:absolute; z-index:2' src='"+cat.url+
+ "' width = '"+cat.width/x+"' height = '"+cat.height/x+
+ "' onmouseover='this.width="+cat.width/xx+"; this.height="+cat.height/xx+"' onmouseout='this.width="+cat.width/x+"; this.height="+cat.height/x+"'/></div>"
+
+  try { markerSanta[i].removeFrom(map); }catch(e){}
+    var tt = moment.parseZone(coords[i].time*1000).format('DD-MM-YYYY HH:mm:ss');
   if (i < now-1) { 
     markerSanta[i] = WE.marker(coords[i].coord).addTo(map);
-    markerSanta[i].bindPopup("Santa was here<br><span style='font-size:10px;color:#999'>"+ tt +"</span>", {maxWidth: 150, closeButton: true});
+    markerSanta[i].bindPopup("Santa was here<br><span style='font-size:10px;color:#999'>"+ tt +"</span>"+imag, {maxWidth: 150, closeButton: true});
   }
   else {
     markerSanta[i] = WE.marker(coords[i].coord, './img/santa1.png', 200,113).addTo(map);
-    markerSanta[i].bindPopup("HO-HO-HO, I am here!<br><span style='font-size:10px;color:#999'>"+weth+"<br>"+tt+"</span>", {maxWidth: 150, closeButton: true}).openPopup();
+    markerSanta[i].bindPopup("HO-HO-HO, I am here!<br><span style='font-size:10px;color:#999'>"+weth+"<br>"+tt+"</span>"+imag, {maxWidth: 150, closeButton: true}).openPopup();
     panTo(coords[i].coord);
   }
 }
@@ -340,7 +348,7 @@ try {
     linksx.push({source:nodesg[0].id, target:101});
   }
 }catch(e){}
-  if (nodesg.length < 2) {alert('Select one or more Oracles!');return} else {modalv('#graph');}
+  if ((nodesg.length < 2 && vm.type == 0) || (vm.type == 1 && nodesg.length < 4)) {alert('Select one or more Oracles!');return} else {modalv('#graph');}
   
    const gData = {
    nodes: nodesg,
