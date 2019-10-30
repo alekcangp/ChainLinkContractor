@@ -3,7 +3,7 @@ pragma solidity 0.4.24;
 import "https://github.com/smartcontractkit/chainlink/evm/contracts/Chainlinked.sol";
 import "https://github.com/smartcontractkit/chainlink/evm/contracts/vendor/Ownable.sol";
 
-//Token Contract
+//Token Contract Rinkeby 0x10d05006a637470a709f9d41cb61bcea96ebe9b6
 
 contract HappyNewYear {
  
