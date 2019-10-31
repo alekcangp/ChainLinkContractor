@@ -41,7 +41,7 @@ a {
     position: fixed;
     width: 100%;
     top:60px;
-    height: calc(100vh - 90px);
+    height: calc(100vh - 70px);
     overflow: auto ;  
     text-align: center;
     color:greenyellow;

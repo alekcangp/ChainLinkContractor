@@ -43,6 +43,17 @@ var vm = new Vue({
   }
 });
 
+
+var di = ['bot1','bot2'];
+bot();
+function bot() {
+  var ico = '<div class = "point" onclick="swit(2)"><i class="fas fa-robot"></i></div>';
+  di = di.reverse();
+  document.getElementById(di[0]).innerHTML = ico;
+  document.getElementById(di[1]).innerHTML = '';
+  setTimeout(bot, Math.random()*10000)
+}
+
 function gits() {
   var uu;
   if (vm.type == 0) {uu = "https://remix.ethereum.org/#gist=7d65a495c5bd1804414ce115a325f586&optimize=false&evmVersion=null&version=soljson-v0.4.24+commit.e67f0147.js"}

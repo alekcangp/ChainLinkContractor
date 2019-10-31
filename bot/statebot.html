@@ -1,0 +1,635 @@
+﻿<html>
+<head>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src = "./web3.min.js"></script>
+</head>
+<body style = 'color:DeepSkyBlue; background-color:black'>
+
+alert <div id = 'aler2'>...</div>
+
+ contracts: <span id = 'ebt'>...</span> local: <span id = 'loct'>...</span><br>
+addresses<div id = 'address'>...</div>
+counts <span id = 'idaddress'>...</span><br>
+txn <span id = 'txn'>...</span><br>
+
+balances<div id = 'balance'>...</div>
+
+db<div id = 'db'>...</div>
+
+<script>
+
+
+var vmbestb, bestbl, ind, memp, d, cc = 0, blocks = [], mems = [], memsago = [], dubl=[], diffx = [], memrms = 0, bestdiff, stst = 0, swthb='', swthbt='', trd = 0, trdiff = -15,
+trale = 0, errnet = 0, trago = 600, upd = [], diffxs = [], vmtokens = [], token = 'xxx', cheneo = [], cheswh = [], xaddra = [], xaddri = [], xidad = [], xidadd = [], xaddrid = [], callarr = [], activa = [], passiva = [], remova = [], countrun = 0, callarrx = [], updid = [], names = [], loc, memnod = 200, contracts = {}, tind = 2000, indlen = 15,
+//xxx, test xxx
+
+baseupd = [];
+
+var web3 = new Web3('https://mainnet.infura.io/v3/xxx');
+
+//setTimeout(bot, 30000, '%F0%9F%A4%96 Previous messages (on July 26 and 31) "Switcheo nodes are not synchronized ..." are incorrect. The issue is caused the bot server. Switcheo nodes are fully functional.', 'swh');
+
+setTimeout(clearupd, 10000);
+setInterval(clearupd, 86400000);
+//setInterval(orders, 60000);
+
+
+
+setInterval(users, 43200000);
+setInterval(locals, 4000, 0);
+
+
+setInterval(stateContracts, 60000);
+
+
+
+//setTimeout(function () { axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=377550859&parse_mode=Markdown&text=Address "AetXb6U1FMcA3zNak8FuPmY33ovi4xj4wg" has too many transactions. Tracking and checking balance for this address is not available.')},500);
+//setTimeout(function () { bot("%F0%9F%A4%96 Test", "menu") }, 10000);
+
+//clear the log
+function clearupd() {
+  var mesz, timc;
+ 
+  for (var i = 0; i<loc.length; i++) {
+   
+   if (loc[i].callback_query == undefined) { mesz = loc[i].message.text; timc = loc[i].message.date} else { mesz = (loc[i].callback_query.data).substr(0,3); timc = loc[i].callback_query.message.date}
+   timc = moment().unix() - timc;
+   if ((mesz == 'Contracts Manager' || mesz == 'bal' || mesz == 'LINK Info') && timc > 172800 ) { loc.splice(i,1); i = i-1}
+   
+  }
+  
+  localStorage.setItem("updx0", JSON.stringify(loc))
+}
+
+
+//monitor state smart contracts
+
+function stateContracts() {
+
+var ethbal = JSON.parse(localStorage.getItem("ethbal0")), tbal, i = 0, co = 0, coo = 0, ethar = [], addrn, ethtr = 0, ethbalx = [], ebt = moment()/1000;
+try{
+  contracts = {};
+  for (var k = 1; k < activa.length; k = k+2) {
+  indexes(activa[k]);
+}
+
+setTimeout(next,tind+100);
+
+  function next() {
+   // contracts = {"0x972c49907d7f22e2c8ae164c92c1019308ab03fa":[2,0,0,0,8,0,0,0,0,0,0,0,0,0,0],"0x10d05006a637470a709F9D41cB61bceA96eBe9b6":[5,0,0,0,0,0,0,0,0,0,0,0,0,0,5]}
+   // ethbal = undefined; //
+     
+    if (ethbal == undefined)  {localStorage.setItem("ethbal0", JSON.stringify(contracts)); return}
+  
+   // alert(JSON.stringify(ethbal));
+   var contractx = [];
+    for (ind in contracts) {//alert(ind);
+      var temparr =  Array(indlen).fill("");
+      
+        if (ethbal[ind] != undefined) {
+          var ev = 0;
+          for (var r = 0; r < indlen; r++){
+           if (contracts[ind][r] != ethbal[ind][r]) {++ev;
+             temparr[r] = contracts[ind][r];
+            }
+          }
+
+          var idd = activa[activa.indexOf(ind)-1];
+        
+           var ali = names[names.indexOf(idd+ind)+1];
+           if (ali == undefined || ali.length > 50) {ali =''}
+        
+          if (ev != 0) {contractx.push({"a":ind,"id":idd,"ali":ali,"arr":temparr}) }
+        }
+          
+      }
+  
+     
+      localStorage.setItem("ethbal0", JSON.stringify(contracts));
+      //alert(JSON.stringify(contractx));
+      senddif(contractx, 0);
+
+      function senddif(mm,i) {
+        var mesc = '*Contract Storage Indexes Changed:*%0A';
+                        for (var j = 0; j < mm[i].arr.length; j++) {
+                         if (mm[i].arr[j] !== '') mesc = mesc +'*'+j+':* ' + mm[i].arr[j] + '%0A';
+                        
+                        }
+
+        axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id='+mm[i].id+'&parse_mode=Markdown&text='+mm[i].ali+'%0A*'+mm[i].a+'*'+ '%0A'+mesc);
+        
+        ++i;
+        if (i < mm.length) {setTimeout(senddif,500,mm,i)};
+      }
+
+    }
+
+  
+
+}catch(e){}
+
+}
+
+   
+locals(1);
+function locals(x) { 
+var cc = 0, loct = moment()/1000; 
+axios.get('https://api.telegram.org/'+token+'/getUpdates?offset=-1').then(function(response) {
+var up = response.data.result; 
+//var up = [];
+
+  loc = JSON.parse(localStorage.getItem("updx0"));
+  //loc = undefined;
+  if (loc == undefined) { localStorage.setItem("updx0", JSON.stringify(baseupd)); loc = JSON.parse(localStorage.getItem("updx0")) };
+  for (var it in up) {
+    var c = 0;
+    for (var itx in loc) {
+      if (loc[itx].update_id == up[it].update_id) {++c}
+    };
+    if (c == 0) { loc.push(up[it]); ++cc }
+  };
+  if (cc != 0) { localStorage.setItem("updx0", JSON.stringify(loc));
+  
+  //document.getElementById('db').innerHTML = (localStorage.getItem("updx")).substr(-3000);
+  document.getElementById('db').innerHTML = localStorage.getItem("updx0");//JSON.stringify(up);
+  upd = JSON.parse(localStorage.getItem("updx0")); 
+  orders(loct);//!!!!!
+  }
+if (x == 1) {
+  upd = JSON.parse(localStorage.getItem("updx0")); 
+  orders(loct);//!!!!!
+}
+
+});
+
+};
+
+
+ 
+// chating with bot api
+
+function bot(mes, typ) { 
+var che = [], chid; ii = 0, kneo = 0, kswh = 0, kmenu = 0;
+fordelay();
+
+function fordelay() {
+
+  if (ii < upd.length) {
+  
+  if (upd[ii].callback_query == undefined) {
+   chid = upd[ii].message.chat.id;
+  //chid = 377550859;
+  if (che.indexOf(chid) == -1) {
+    che.push(chid);
+   
+  
+   if (typ == 'menu') { 
+    botx(mes, chid); ++kmenu;
+    //che.push(chid); 
+    document.getElementById('aler2').innerHTML = kmenu + ' ' + mes + ' ' + che;
+    }
+    ++ii;  setTimeout(fordelay, 50); return;  
+  } 
+     
+  } 
+  ++ii; fordelay()
+  }
+}
+
+};
+
+
+function botx(mesx, chidx) {
+
+
+  axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=' + chidx + '&parse_mode=Markdown&text='+mesx+'&reply_markup={"keyboard":[[{"text":"LINK Info"},{"text":"Contracts Manager"}]],"one_time_keyboard":false,"resize_keyboard":true}');
+}
+
+var hassold;
+
+
+function users() {
+  var chex = [], chidx, m = 0;
+for (var item of upd) {
+  if (item.callback_query == undefined) {
+  chidx = item.message.chat.id;
+  if (chex.indexOf(chidx) == -1) { ++m;  chex.push(chidx); 
+  } else {continue}
+  } 
+};
+axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=377550859&text='+ m + ' ' + xaddra.length);
+  
+}
+
+
+// ORDERS
+var existarr = [];
+function orders(loct) {
+ 
+var  addr0, ok = 1, addr = '', chidy, mes ='', me, ty, act, upda = [], updd = [], updr = [], uid;
+names = [];
+++countrun;
+
+for (var j = 0; j < upd.length; j++) {
+
+uid = upd[j].update_id;
+
+if (countrun == 1) {updid.push(uid)};
+
+try {
+
+  if (upd[j].callback_query == undefined) { 
+    mes = (upd[j].message.text).replace(/\s/g, '');
+    
+    chidy = upd[j].message.chat.id;//377550859;//
+  } else {
+    mes = upd[j].callback_query.data;
+    chidy = upd[j].callback_query.message.chat.id;//377550859;//
+  }
+
+  if (countrun == 1 && upd[j].callback_query != undefined) {
+   callarr.push(upd[j].callback_query.id);
+  }
+} catch(e) {continue};
+ 
+
+if ((mes.length == 34 && mes.substr(0,1) == 'A') || (mes.length == 42 && mes.substr(0,2) == '0x') ) {
+mes = 'add' + mes; chepus(mes, j, chidy);
+} else { chepus(mes, j, chidy) }
+
+// TRACKING
+
+function chepus (mess, jk, cch) {
+
+  
+  var hiola = ['Hi!', ' Ola!', ' Привет!', ' Bonjour!', ' Buenas dias!'];
+  var hiolal = ['Hi', 'hi', 'Ola', 'ola', 'Привет', 'привет', 'Hello', 'hello', 'Bonjour', 'bonjour', 'Buenas dias', 'buenas dias',];
+
+ ty = mess.substr(0,3).toLowerCase();
+ addr = mess.substr(3, mess.length-3);
+ 
+if (ty == 'bal' && addr.length > 33) {
+  pushupd(addr, jk, cch);
+}
+
+ else if ( ty == 'nam') {
+  if (callarr.indexOf(upd[jk].callback_query.id) == -1 && callarrx.indexOf(upd[jk].callback_query.id) == -1) {
+                axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=' + cch + '&text=%F0%9F%A4%96 Send name for the contract: ' + addr);
+                callarrx.push(upd[jk].callback_query.id); 
+              } 
+var c = 0;
+for (var y = jk+1; y < upd.length; y++) {
+  
+  if (upd[y].callback_query == undefined ) {
+    var cchy = upd[y].message.chat.id;
+    var mesy = upd[y].message.text;
+    if (cch == cchy) {
+      
+      
+      if ((mesy.length == 42 && mesy.substr(0,2) == '0x') || mesy == '/start' || mesy == '/reset' || mesy == '/add' || mesy == '/del'|| mesy == 'Contracts Manager' || mesy == 'LINK Info') {callarr.push(upd[jk].callback_query.id); break; }
+      else {
+        if (names.indexOf(cchy+addr) == -1) {names.push(cchy+addr, mesy); ++c; break}
+          else {
+            names[names.indexOf(cchy+addr)+1] = mesy; ++c; break; 
+          }    
+      } 
+    }
+  }
+}
+ (c != 0) ? pushupd(addr, jk, cch) : {};
+}
+
+
+else if (mess == 'ContractsManager') {
+  if (updid.indexOf(uid) == -1) { updid.push(uid);
+    manmenu(cch);
+  }
+}
+
+
+//else if (mess == 'TrackingSanta') {
+  //if (updid.indexOf(uid) == -1) { 
+    //axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=' + cch + '&parse_mode=Markdown&text=A magic wish is required to continue...' + '&reply_markup=//{"inline_keyboard":[[{"text":"Yes, I have the magic wish!","url": "http://switcheoexplorer.tech/2019.html"}]]}');
+  //}
+//}
+
+else if (ty == 'rem') { pushupd(addr,jk,cch)}
+
+else if (addr !='' && (ty == 'add'  || ty == 'del'))  {
+  
+ 
+
+      
+
+				//eth address validation
+				if ( addr.length == 42 && addr.substr(0,2) == '0x' ) {
+					(addr.substr(0,2) != '0x') ? addr0 = "0x" + addr : addr0 = addr;
+          addr0.toLowerCase();		
+          
+					var ALPHABET_ETH = '0123456789ABCDEFabcdef';
+					var ALPHABET_MAP_ETH = {};
+					for (var i = 0; i < ALPHABET_ETH.length; i++) {
+					ALPHABET_MAP_ETH[ALPHABET_ETH.charAt(i)] = i
+					};
+					var adr = addr0.substr(2,40);
+					for (i = 0; i < adr.length; i++) {
+						var c = adr[i];	
+						if (!(c in ALPHABET_MAP_ETH) || addr0.length != 42) {
+              if (updid.indexOf(uid) == -1) { 
+					  axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=' + cch + '&text=%E2%9D%97 Incorrect ETH address: ' + addr);
+              }
+            ok = 0; break	 
+						}	
+					}
+          pushupd(addr0, jk, cch);
+				} else if (addr != '') { 
+          if (updid.indexOf(uid) == -1) { 
+           axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=' + cch + '&text=%E2%9D%97 Incorrect address: ' + addr); 
+          }
+           
+        }
+	}
+
+
+  else if (mess == 'LINKInfo' && updid.indexOf(uid) == -1) {
+	var tokarr = [], swthd = '', exchd = '', exarr = [];
+	
+	
+	linkinf(chidy);
+
+	async function linkinf(chidyy) {
+   var gas='Gas Price: ';
+    await axios.get("https://web3api.io/api/v2/transactions/gas/predictions",{headers:{"x-api-key":"xxx","x-amberdata-blockchain-id":"1c9c969065fcd1cf"}}).
+    then(function(resp){gas = gas + resp.data.payload.average.gasPrice*1e-9 + ' GWei'}).catch(function(e){gas = ''})
+
+await axios.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=chainlink,ethereum').then(function(response) { 
+tokarr = response.data; 
+swthd = '[LINK Token](coingecko.com/en/coins/switcheo)%0ARank: ' + tokarr[1].market_cap_rank + '%0APrice: $*'
+  + (tokarr[1].current_price).toLocaleString('en-EN', {maximumFractionDigits:6 }) 
+  + '* (*' + (tokarr[1].current_price/tokarr[0].current_price).toLocaleString('en-EN', {maximumFractionDigits:6 }) + '* ETH)' 
+  +'%0AChange 24h: *' + (tokarr[1].price_change_percentage_24h).toFixed(2)
+  +'*% %0AVolume 24h: $*' + (tokarr[1].total_volume).toLocaleString('en-EN', {maximumFractionDigits:0 }) 
+  +'*'//%0AMarket  Cap: $*' + (tokarr[1].market_cap).toLocaleString('en-EN', {maximumFractionDigits:0 })+'*'
+}).catch(function(e) {swthd = '[LINK Token](coingecko.com/en/coins/switcheo): API is unreachable.'});
+
+
+  axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=' + chidyy + '&disable_web_page_preview=true&parse_mode=Markdown&text=' + swthd+swthb+'%0A' + exchd + gas)
+  
+  }
+	
+	}
+  else if (mess == '/reset') {
+  
+  if (updid.indexOf(uid) == -1) {  
+    var locc = JSON.parse(localStorage.getItem("updx0"));
+    for (var i = 0; i < locc.length; ++i) {
+      if (locc[i].callback_query == undefined) { 
+        if (locc[i].message.chat.id == chidy) {locc.splice(i,1); --i }
+      } else { 
+        if (locc[i].callback_query.message.chat.id == chidy) { locc.splice(i,1); --i} 
+     }
+    }
+  localStorage.setItem("updx0", JSON.stringify(locc)); 
+  //upd = JSON.parse(localStorage.getItem("updx")); 
+  axios.get('https://api.telegram.org/'+token+'/getUpdates?offset=-1').then(function(response) {});
+  botmenu('All data has been cleaned!');
+  locals(1);
+  }
+}
+else if (mess == '/start') {
+    
+    if (updid.indexOf(uid) == -1) {
+     
+      botmenu('WELCOME! %0A');
+	//setTimeout(function() {axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=' + chidy + '&parse_mode=Markdown&text=' + him + '&reply_markup={"inline_keyboard":[[{"text":"Video Tutorial","url": "https://vimeo.com/312670901"}]]}')}, 100);
+    }
+  }
+
+  else if (mess.substr(0,4).toLowerCase() == '/add' || mess.toLowerCase() == 'add') {
+    if (updid.indexOf(uid) == -1) { 
+		axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=' + chidy + '&text=%F0%9F%A4%96 To activate a contract tracking, just send the contract address.');
+      }
+  }
+  else if (mess.substr(0,4) == '/del' || mess.toLowerCase() == 'del') {
+    if (updid.indexOf(uid) == -1) { 
+		axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=' + chidy + '&text=%F0%9F%A4%96 To deactivate a contract tracking,, use the Contracts Manager.');
+      }
+  } 
+else if (hiolal.indexOf(mess) != -1) {
+    if (updid.indexOf(uid) == -1) { 
+		axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=' + chidy + '&text=%F0%9F%A4%96 ' + hiola);
+      }
+  }
+  else if (mess.toLowerCase() == 'ty' || mess.toLowerCase() == 'thanks' || mess.toLowerCase() == 'thank') {
+    if (updid.indexOf(uid) == -1) { 
+		axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=' + chidy + '&text=%F0%9F%A4%96 Thanks for your support.');
+      }
+  } else {
+    if (updid.indexOf(uid) == -1 && names.indexOf(mess) == -1) { 
+    //axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=' + chidy + '&text=%E2%9D%97 Incorrect address: ' + mess);
+    }
+  }
+
+  function pushupd(ad, jj, ccheidy) {
+         
+      if (ok == 1) {
+           if (ty == 'add') {
+            if (upd[jj].callback_query == undefined) { 
+              upd[jj].message.text = 'add'+ad
+            }
+             upda.push(upd[jj]); 
+             if (existarr.indexOf(ccheidy+ad) == -1 ) { 
+              act = '%F0%9F%93%88 Contract tracking is enabled for ' + ad;
+               
+               }
+             else { act = 'Address already exists.' }
+
+           } else if (ty == 'del') {
+            if (upd[jj].callback_query == undefined) { 
+              upd[jj].message.text = 'del'+ad
+            }
+            upda.push(upd[jj]); 
+           act = '%F0%9F%93%89 Contract tracking is disabled for ' + ad;
+           } else if (ty == 'rem') {
+            upda.push(upd[jj]);
+           }
+           
+              if (updid.indexOf(uid) == -1 && upd[jj].callback_query == undefined) { 
+             axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=' + ccheidy + '&text=' + act);
+              }
+       
+        if (upd[jj].callback_query != undefined) { 
+           var ans = upd[jj].callback_query.id;
+           if (callarr.indexOf(ans) == -1) {
+              var ansm, butt, te, callb, mesid = upd[jj].callback_query.message.message_id, nms, nmss;
+              
+              if (names.indexOf(ccheidy+ad) == -1) {nms = ''} else {nms = '_' + names[names.indexOf(ccheidy+ad)+1] + '_%0A'; nmss = names[names.indexOf(ccheidy+ad)+1] + '%0A' }
+
+                if (ty == 'add' || ty == 'del') { 
+                  if (ty == 'add') { 
+                    ansm = 'Tracking is enabled for ' + ad; butt = 'Stop Tracking'; te = nms+'*'+ad+'*'; callb = 'del' + ad;
+                  } else if (ty == 'del') { 
+                    ansm = 'Tracking is disabled for ' + ad; butt = 'Start Tracking'; te = nms + ad; callb = 'add' + ad;
+                  }
+                
+                  axios.post('https://api.telegram.org/'+token+'/editMessageText?chat_id='+ccheidy+'&message_id='+mesid+'&parse_mode=Markdown&text='+te+'&reply_markup={"inline_keyboard":[[{"text":"'+butt+'","callback_data": "' + callb+'"},{"text":"Remove", "callback_data":"rem'+ad+'"},{"text":"Alias", "callback_data": "nam'+ad+'"},{"text":"State", "callback_data": "bal'+ad+'"}]]}');
+                  setTimeout(function () {axios.post('https://api.telegram.org/'+token+'/answerCallbackQuery?callback_query_id=' + ans + '&show_alert=true&text=' + ansm)}, 500)
+
+                } else if (ty == 'rem') {
+                  axios.post('https://api.telegram.org/'+token+'/editMessageText?chat_id='+ccheidy+'&message_id='+mesid+'&text=...');
+                  setTimeout(function () {axios.post('https://api.telegram.org/'+token+'/deleteMessage?chat_id='+ccheidy+'&message_id='+mesid)}, 100);
+                  setTimeout(function () {axios.post('https://api.telegram.org/'+token+'/answerCallbackQuery?callback_query_id=' + ans + '&show_alert=true&text='+ad+' was removed.')}, 500) 
+                } else if (ty == 'nam') {
+                    if (activa.indexOf(ad) != -1) {                      
+                      te = nms+'*'+ad+'*'; butt = 'Stop Tracking'; callb = 'del' + ad;
+                    } else if (passiva.indexOf(ad) != -1) {
+                      te = nms+ad; butt = 'Start Tracking'; callb = 'add' + ad;
+                    }
+                  axios.post('https://api.telegram.org/'+token+'/editMessageText?chat_id='+ccheidy+'&message_id='+mesid+'&parse_mode=Markdown&text=' + te+ '&reply_markup={"inline_keyboard":[[{"text":"'+butt+'","callback_data": "' + callb+'"},{"text":"Remove", "callback_data":"rem'+ad+'"},{"text":"Alias", "callback_data": "nam'+ad+'"},{"text":"State", "callback_data": "bal'+ad+'"}]]}');
+                  setTimeout(function () {axios.post('https://api.telegram.org/'+token+'/answerCallbackQuery?callback_query_id=' + ans + '&show_alert=true&text='+nmss+'was asigned to address: '+ad)}, 500); 
+                 
+                  } else if (ty == 'bal') {
+                      indexes(ad);
+                      setTimeout(statemes, tind + 10, ad);
+                      
+                      // web3.utils.hexToAscii  web3.toDecimal web3.utils.hexToNumberString(res)
+                      function statemes(a) {
+                        var arri = contracts[a];
+                        var mescon = '*Contract Storage Indexes:*%0A';
+                        for (var i = 0; i < arri.length; i++) {
+                         if (arri[i] != 0) mescon = mescon +'*'+i+':* ' + arri[i] + '%0A';
+                        }
+                        
+                        document.getElementById('balance').innerHTML = a + '<br>'+  mescon;
+                        axios.post('https://api.telegram.org/'+token+'/answerCallbackQuery?callback_query_id=' + ans + '&show_alert=false&text=');
+                        axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id='+ccheidy+'&parse_mode=Markdown&text='+nms+'*'+a+'*'+ '%0A'+mescon);
+                      }
+                   
+                  }
+
+                 callarr.push(ans); 
+                }
+           
+           }
+        }
+      }
+  
+
+
+
+// INLINE KEYBOARD
+  function manmenu(ch) {
+ //axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=' + chidy + '&text=List of addresses: ');
+      var addrm, trr = 0, nama;
+      for (var i = 0; i < activa.length; i=i+2) {
+        if (ch == activa[i]) {++trr;
+          addrm = activa[i+1];
+          
+          (names.indexOf(ch+addrm) == -1) ? nama = '' : nama = '_' + names[names.indexOf(ch+addrm)+1] + '_%0A';
+         
+           axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=' + ch + '&parse_mode=Markdown&text=' + nama + '*' + addrm + '*&reply_markup={"inline_keyboard":[[{"text":"Stop Tracking","callback_data": "del'+addrm+'"},{"text":"Remove", "callback_data": "rem'+addrm+'"},{"text":"Alias", "callback_data": "nam'+addrm+'"},{"text":"State", "callback_data": "bal'+addrm+'"}]]}');
+        }
+      }
+      for (var i = 0; i < passiva.length; i=i+2) {
+        if (ch == passiva[i]) {++trr;
+          addrm = passiva[i+1];
+          (names.indexOf(ch+addrm) == -1) ? nama = '' : nama = '_' + names[names.indexOf(ch+addrm)+1] + '_%0A';
+           axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=' + ch + '&parse_mode=Markdown&text=' + nama + addrm + '&reply_markup={"inline_keyboard":[[{"text":"Start Tracking","callback_data": "add'+addrm+'"},{"text":"Remove", "callback_data": "rem'+addrm+'"},{"text":"Alias", "callback_data": "nam'+addrm+'"},{"text":"State", "callback_data": "bal'+addrm+'"}]]}');
+        }
+      }
+      (trr == 0) ? axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=' + ch + '&text=%F0%9F%A4%96 Contracts are not detected. Send the smart contract address to start tracking.') : {}; 
+     
+  }
+
+  // BOT MENU
+function botmenu(mesb) { 
+  if (updid.indexOf(uid) == -1) { 
+		axios.post('https://api.telegram.org/'+token+'/sendMessage?chat_id=' + chidy + '&parse_mode=Markdown&text=%F0%9F%A4%96 ' + mesb +'&reply_markup={"keyboard":[[{"text":"LINK Info"},{"text":"Contracts Manager"}]],"one_time_keyboard":false,"resize_keyboard":true}');
+    }
+}
+
+  
+}
+
+(updid.indexOf(uid) == -1) ? updid.push(uid) : {};
+
+}
+
+
+
+// filter upd and create addr array
+
+//document.getElementById('idaddress').innerHTML = JSON.stringify(upda);
+ 
+if (upda != '') {
+ 
+  xaddra = []; xidad = []; xidadd = []; xaddri = []; xaddrid = [], activa = [], passiva = [], remova = [], existarr = [];
+ var imes, ichidy, iaddr, jmes, jchidy, jst, jaddr, ime, jme, imesarr = []; 
+
+for (var i = upda.length-1; i >= 0; i--) { 
+  if (upda[i].callback_query == undefined) { 
+    imes = (upda[i].message.text).replace(/\s/g, '');
+    ichidy = upda[i].message.chat.id;//377550859;//
+  } else {
+    imes = upda[i].callback_query.data;
+    
+    ichidy = upda[i].callback_query.message.chat.id;//377550859;//
+  };
+  
+  iaddr = imes.substr(3, imes.length-3); 
+  
+  if (imesarr.indexOf(ichidy+iaddr) == -1) { imesarr.push(ichidy+iaddr); 
+    if (imes.substr(0,3) == 'add') {
+      activa.push(ichidy, iaddr); 
+      existarr.push(ichidy+iaddr); 
+      if (xaddra.indexOf(iaddr) == -1) { xaddra.push(iaddr); }
+    } 
+   else if (imes.substr(0,3) == 'del') { 
+    passiva.push(ichidy, iaddr);
+    existarr.push(ichidy+iaddr);
+   } else if (imes.substr(0,3) == 'rem') { 
+     remova.push(ichidy, iaddr) 
+     }
+  }
+}
+
+document.getElementById('address').innerHTML = xaddra ;
+
+}
+
+document.getElementById('loct').innerHTML = (moment()/1000 - loct).toFixed(3);
+
+}//orders
+
+//read contract state
+function indexes(a) {
+  var q = Array(indlen).fill("");
+   for (ind = 0; ind < indlen; ind++){
+      srr(ind);
+    }
+
+    setTimeout(function(){contracts[a] = q},tind);  
+
+  function srr(ind) {
+      web3.eth.getStorageAt(a, ind).then(function(res) {
+        try{
+ if ( web3.utils.hexToNumberString(res) == '0') {q[ind] = 0}
+        else if (res.substr(2,3) != '000') {q[ind] = web3.utils.hexToAscii(res)}
+        else if (res.substr(2,27) == '000000000000000000000000000') {q[ind] = web3.utils.hexToNumberString(res)}
+        else {q[ind] = '0x'+ res.substr(26)}
+
+        }catch(e){}
+       
+        
+      }).catch(function(e){});
+  }
+
+}
+
+
+</script>
+
+
+</body>
+</html>
