@@ -13,6 +13,8 @@ The Contractor allows users to easily create Aggregation Contract and Service Le
 
 In addition, (especially for fans :) users can find out where is Santa located on the globe and get HappyNewYear tokens from Santa. This feature also interacts with the real-world through ChainLink Oracle (random.org).
 
+The Contract State Monitor bot tracks smart contracts state, notifies if the state is changed and shows changed values (Contract Storage). In additionally, it shows LINK token info and current gas price (amberdata.io).
+
 Requirements:
 * <a href = "https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn">MetaMask Plugin</a>
 
@@ -23,6 +25,7 @@ Requirements:
 ![ScreenShort](https://raw.githubusercontent.com/alekcangp/ChainLinkContractor/master/img/1.jpg)
 ![ScreenShort](https://raw.githubusercontent.com/alekcangp/ChainLinkContractor/master/img/2.jpg)
 ![ScreenShort](https://raw.githubusercontent.com/alekcangp/ChainLinkContractor/master/img/3.jpg)
+![ScreenShort](https://raw.githubusercontent.com/alekcangp/ChainLinkContractor/master/img/4.jpg)
 
 
 
